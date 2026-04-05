@@ -110,7 +110,15 @@ cargo build --release
 ```bash
 # Web panelini başlat
 cargo run -- --web
-```
+> Tarayıcı otomatik olarak açılır. URL girerken `https://` yazmana gerek yok, otomatik eklenir.
+
+### Web Panel Özellikleri
+- 🎨 Karanlık/Aydınlık tema
+- 📊 Progress bar (geçen/toplam header)
+- 🕓 Analiz geçmişi (son 5 analiz)
+- 📋 JSON çıktı görüntüleme
+- 📄 Sonuçları kopyalama
+- 🌍 Türkiye saat/tarih formatı```
 
 Tarayıcıdan `http://localhost:8080` adresine git.
 ```bash
