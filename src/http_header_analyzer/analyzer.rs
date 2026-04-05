@@ -86,6 +86,21 @@ const SECURITY_HEADERS: &[(&str, &str, &str)] = &[
     ),
     (
         "x-xss-protection",
+(
+        "cross-origin-opener-policy",
+        "COOP eksik — cross-origin izolasyon yok",
+        "COOP mevcut ✓",
+    ),
+    (
+        "cross-origin-resource-policy",
+        "CORP eksik — kaynak izolasyon yok",
+        "CORP mevcut ✓",
+    ),
+    (
+        "cross-origin-embedder-policy",
+        "COEP eksik — embedding izolasyon yok",
+        "COEP mevcut ✓",
+    ),
         "X-XSS-Protection eksik (eski tarayıcılar için önerilir)",
         "X-XSS-Protection mevcut ✓",
     ),
