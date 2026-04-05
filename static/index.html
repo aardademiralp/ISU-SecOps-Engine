@@ -209,7 +209,7 @@
         }
 
         function addToHistory(url, score, grade) {
-            history.unshift({ url, score, grade, time: new Date().toLocaleString('tr-TR')  });
+            history.unshift({ url, score, grade, time: new Date().toLocaleString('tr-TR', {timeZone: 'Europe/Istanbul'})  });
             if (history.length > 5) history.pop();
             renderHistory();
         }
@@ -311,8 +311,7 @@ if (url && !url.startsWith('http://') && !url.startsWith('https://')) {
 
                 document.getElementById('resultBox').classList.add('visible');
             } catch (e) {
-                document.getElementById('errorBox').textContent = '❌ Hata: ' + e.message;
-                document.getElementById('errorBox').style.display = 'block';
+document.getElementById('errorBox').textContent = '❌ Geçersiz adres veya siteye ulaşılamıyor. Lütfen doğru bir URL girin. (örn: google.com)';                document.getElementById('errorBox').style.display = 'block';
             } finally {
                 document.getElementById('loading').style.display = 'none';
             }
