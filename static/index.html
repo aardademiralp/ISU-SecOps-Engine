@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ISU-SecOps-Engine</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0a0a0f;
+            color: #e0e0e0;
+            font-family: 'Courier New', monospace;
+            min-height: 100vh;
+        }
+        header {
+            background: linear-gradient(135deg, #0d1117, #1a1a2e);
+            border-bottom: 2px solid #00ff88;
+            padding: 20px 40px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 0 30px rgba(0,255,136,0.2);
+        }
+        header h1 {
+            font-size: 1.5rem;
+            color: #00ff88;
+            text-shadow: 0 0 10px #00ff88, 0 0 20px #00ff88;
+            animation: flicker 3s infinite;
+        }
+        @keyframes flicker {
+            0%, 95%, 100% { opacity: 1; }
+            96% { opacity: 0.8; }
+            97% { opacity: 1; }
+            98% { opacity: 0.9; }
+        }
+        header p { color: #888; font-size: 0.85rem; margin-top: 4px; }
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .search-box {
+            background: #0d1117;
+            border: 1px solid #00ff88;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 20px rgba(0,255,136,0.1);
+        }
+        .search-box h2 { color: #00ff88; margin-bottom: 15px; font-size: 1rem; }
+        .input-row { display: flex; gap: 10px; }
+        input[type="text"] {
+            flex: 1;
+            background: #1a1a2e;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 12px 16px;
+            color: #e0e0e0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        input[type="text"]:focus {
+            border-color: #00ff88;
+            box-shadow: 0 0 10px rgba(0,255,136,0.3);
+        }
+        button {
+            background: #00ff88;
+            color: #0a0a0f;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 0 10px rgba(0,255,136,0.3);
+        }
+        button:hover {
+            background: #00cc6a;
+            box-shadow: 0 0 25px rgba(0,255,136,0.7), 0 0 50px rgba(0,255,136,0.3);
+            transform: translateY(-1px);
+        }
+        button:active { transform: translateY(0); }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 30px;
+            display: none;
+        }
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid #1a1a2e;
+            border-top: 3px solid #00ff88;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .loading p { color: #00ff88; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+        .error-box {
+            background: #1a0000;
+            border: 1px solid #ff4444;
+            border-radius: 8px;
+            padding: 15px;
+            color: #ff4444;
+            display: none;
+            margin-bottom: 20px;
+        }
+        .result-box {
+            background: #0d1117;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 30px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .result-box.visible { display: block; }
+
+        /* Skor */
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            border: 3px solid #00ff88;
+            box-shadow: 0 0 20px rgba(0,255,136,0.3), inset 0 0 20px rgba(0,255,136,0.05);
+            transition: all 0.5s;
+        }
+        .score-circle .score { font-size: 2rem; font-weight: bold; color: #00ff88; }
+        .score-circle .grade { font-size: 1rem; color: #888; }
+
+        /* Info grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        @media (max-width: 600px) { .info-grid { grid-template-columns: 1fr; } }
+        .info-card {
+            background: #1a1a2e;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            transition: box-shadow 0.3s;
+        }
+        .info-card:hover { box-shadow: 0 0 10px rgba(0,255,136,0.2); }
+        .info-card .label { color: #888; font-size: 0.75rem; margin-bottom: 5px; }
+        .info-card .value { color: #00ff88; font-size: 0.95rem; font-weight: bold; word-break: break-all; }
+
+        /* Progress bar */
+        .progress-section { margin-bottom: 25px; }
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            color: #888;
+            font-size: 0.8rem;
+            margin-bottom: 8px;
+        }
+        .progress-bar {
+            background: #1a1a2e;
+            border-radius: 20px;
+            height: 10px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            border-radius: 20px;
+            background: linear-gradient(90deg, #00ff88, #00ccff);
+            box-shadow: 0 0 10px rgba(0,255,136,0.5);
+            transition: width 1s ease;
+            width: 0%;
+        }
+
+        .headers-title {
+            color: #888;
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #222;
+            padding-bottom: 10px;
+        }
+        .header-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            background: #111;
+            transition: transform 0.2s, box-shadow 0.2s;
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+        .header-item:hover { transform: translateX(4px); box-shadow: 0 0 10px rgba(0,255,136,0.1); }
+        .header-item.pass { border-left: 3px solid #00ff88; }
+        .header-item.fail { border-left: 3px solid #ff4444; }
+        .icon { font-size: 1.2rem; }
+        .header-name { color: #e0e0e0; font-weight: bold; font-size: 0.9rem; }
+        .header-note { color: #888; font-size: 0.8rem; margin-top: 3px; }
+        .header-value { color: #00ff88; font-size: 0.75rem; margin-top: 3px; font-family: monospace; word-break: break-all; }
+        .cors-box {
+            background: #1a1a2e;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        .cors-box .title { color: #888; font-size: 0.8rem; margin-bottom: 8px; }
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #444;
+            font-size: 0.8rem;
+            border-top: 1px solid #1a1a2e;
+            margin-top: 40px;
+        }
+        footer span { color: #00ff88; }
+    </style>
+</head>
+<body>
+    <header>
+        <div>
+            <h1>🛡 ISU-SecOps-Engine</h1>
+            <p>HTTP Header Analyzer — BGT006 Sızma Testi | İstinye Üniversitesi</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="search-box">
+            <h2>🔍 Hedef Analiz</h2>
+            <div class="input-row">
+                <input type="text" id="urlInput" placeholder="https://example.com" />
+                <button onclick="analyze()">Analiz Et</button>
+            </div>
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>⏳ Analiz ediliyor...</p>
+        </div>
+        <div class="error-box" id="errorBox"></div>
+
+        <div class="result-box" id="resultBox">
+            <div class="score-circle" id="scoreCircle">
+                <span class="score" id="scoreVal">-</span>
+                <span class="grade" id="gradeVal">-</span>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-card">
+                    <div class="label">URL</div>
+                    <div class="value" id="urlVal">-</div>
+                </div>
+                <div class="info-card">
+                    <div class="label">Durum Kodu</div>
+                    <div class="value" id="statusVal">-</div>
+                </div>
+                <div class="info-card">
+                    <div class="label">Sunucu</div>
+                    <div class="value" id="serverVal">-</div>
+                </div>
+            </div>
+
+            <div class="progress-section">
+                <div class="progress-label">
+                    <span>Header Güvenlik Skoru</span>
+                    <span id="progressText">0 / 7 geçti</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+
+            <div class="headers-title">── Güvenlik Header'ları ──</div>
+            <div id="headersList"></div>
+
+            <div class="cors-box">
+                <div class="title">── CORS Analizi ──</div>
+                <div id="corsInfo"></div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>🛡 ISU-SecOps-Engine v0.1.0 | Geliştirici: <span>Aydın Arda Demiralp</span> | BGT006 Sızma Testi | <span>İstinye Üniversitesi</span></p>
+    </footer>
+
+    <script>
+        const gradeColors = { A: '#00ff88', B: '#00ccff', C: '#ffff00', D: '#ff8800', F: '#ff4444' };
+
+        async function analyze() {
+            const url = document.getElementById('urlInput').value.trim();
+            if (!url) return;
+
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('resultBox').classList.remove('visible');
+            document.getElementById('errorBox').style.display = 'none';
+
+            try {
+                const res = await fetch(`/analyze?url=${encodeURIComponent(url)}`);
+                const data = await res.json();
+
+                if (!res.ok) throw new Error(data);
+
+                // Skor
+                document.getElementById('scoreVal').textContent = data.score;
+                document.getElementById('gradeVal').textContent = data.grade;
+
+                const color = gradeColors[data.grade] || '#888';
+                document.getElementById('scoreCircle').style.borderColor = color;
+                document.getElementById('scoreCircle').style.boxShadow = `0 0 25px ${color}55, inset 0 0 20px ${color}11`;
+                document.getElementById('scoreVal').style.color = color;
+
+                // Info
+                document.getElementById('urlVal').textContent = data.url;
+                document.getElementById('statusVal').textContent = data.status_code;
+                document.getElementById('serverVal').textContent = data.server || 'Belirtilmemiş';
+
+                // Progress bar
+                const passed = data.headers.filter(h => h.passed).length;
+                const total = data.headers.length;
+                const pct = (passed / total) * 100;
+                document.getElementById('progressText').textContent = `${passed} / ${total} geçti`;
+                setTimeout(() => {
+                    document.getElementById('progressFill').style.width = pct + '%';
+                    document.getElementById('progressFill').style.background =
+                        pct >= 80 ? 'linear-gradient(90deg, #00ff88, #00ccff)' :
+                        pct >= 50 ? 'linear-gradient(90deg, #ffff00, #ff8800)' :
+                        'linear-gradient(90deg, #ff4444, #ff8800)';
+                }, 100);
+
+                // Headers
+                const headersList = document.getElementById('headersList');
+                headersList.innerHTML = '';
+                data.headers.forEach((h, i) => {
+                    const div = document.createElement('div');
+                    div.className = `header-item ${h.passed ? 'pass' : 'fail'}`;
+                    div.style.animationDelay = `${i * 0.05}s`;
+                    div.innerHTML = `
+                        <span class="icon">${h.passed ? '✅' : '❌'}</span>
+                        <div>
+                            <div class="header-name">${h.name}</div>
+                            <div class="header-note">${h.note}</div>
+                            ${h.value ? `<div class="header-value">${h.value}</div>` : ''}
+                        </div>
+                    `;
+                    headersList.appendChild(div);
+                });
+
+                // CORS
+                const corsInfo = document.getElementById('corsInfo');
+                if (data.cors.allow_origin) {
+                    corsInfo.innerHTML = `<span style="color:${data.cors.wildcard ? '#ff4444' : '#00ff88'}">
+                        ${data.cors.wildcard ? '⚠️ Wildcard (*) — Riskli!' : '✅ ' + data.cors.allow_origin}
+                    </span>`;
+                } else {
+                    corsInfo.innerHTML = '<span style="color:#888">ℹ️ CORS header yok (normal)</span>';
+                }
+
+                document.getElementById('resultBox').classList.add('visible');
+            } catch (e) {
+                document.getElementById('errorBox').textContent = '❌ Hata: ' + e.message;
+                document.getElementById('errorBox').style.display = 'block';
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+
+        document.getElementById('urlInput').addEventListener('keypress', e => {
+            if (e.key === 'Enter') analyze();
+        });
+    </script>
+</body>
+</html>
