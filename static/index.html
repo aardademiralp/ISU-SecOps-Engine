@@ -244,7 +244,11 @@
             </div>
         </div>
 
-        <div class="loading" id="loading">
+        <div class="loading"<div style="text-align:right;margin-top:10px;">
+            <button onclick="toggleTheme()" id="themeBtn" style="background:transparent;color:#888;border:1px solid #333;padding:6px 12px;font-size:0.75rem;">
+                ☀️ Aydınlık Mod
+            </button>
+        </div>  id="loading">
             <div class="spinner"></div>
             <p>⏳ Analiz ediliyor...</p>
         </div>
@@ -388,7 +392,15 @@ lastData = data;
             }
         }
 
+
         document.getElementById('urlInput').addEventListener('keypress', e => {
+let darkMode = true;
+        function toggleTheme() {
+            darkMode = !darkMode;
+            document.body.style.background = darkMode ? '#0a0a0f' : '#f0f0f0';
+            document.body.style.color = darkMode ? '#e0e0e0' : '#111';
+            document.getElementById('themeBtn').textContent = darkMode ? '☀️ Aydınlık Mod' : '🌙 Karanlık Mod';
+        }
 let lastData = null;
 
         function showJSON() {
