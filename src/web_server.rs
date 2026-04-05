@@ -1,3 +1,10 @@
+//! # Web Sunucusu Modülü
+//! 
+//! Bu modül axum framework kullanarak HTTP panel sunucusunu başlatır.
+//! Endpoint'ler:
+//! - `GET /` — Ana panel sayfası
+//! - `GET /analyze?url=...` — Header analizi
+//! - `GET /health` — Sağlık kontrolü
 use axum::{
     extract::Query,
     http::StatusCode,
