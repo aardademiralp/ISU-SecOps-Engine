@@ -1,3 +1,7 @@
+//! # Puanlama Modülü
+//!
+//! Güvenlik header'larına göre 0-100 arası puan hesaplar.
+//! CORS wildcard kullanımı -10 puan cezası uygular.
 use super::analyzer::{CorsInfo, HeaderResult};
 
 /// Güvenlik header'larına ve CORS durumuna göre 0–100 arası puan hesaplar.
