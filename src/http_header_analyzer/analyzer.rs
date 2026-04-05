@@ -1,3 +1,7 @@
+//! # Analyzer Modülü
+//!
+//! HTTP isteği atarak güvenlik header'larını analiz eder.
+//! 10 kritik header kontrolü ve CORS analizi yapar.
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
