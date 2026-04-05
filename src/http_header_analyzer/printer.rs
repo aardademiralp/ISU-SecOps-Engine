@@ -1,3 +1,7 @@
+//! # Yazdırma Modülü
+//!
+//! Terminal çıktısını renkli olarak yazdırır.
+//! Geçen header'lar yeşil, eksik olanlar kırmızı gösterilir.
 use colored::Colorize;
 
 use super::analyzer::HeaderReport;
