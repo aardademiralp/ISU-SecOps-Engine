@@ -236,7 +236,11 @@
     </header>
 
     <div class="container">
-        <div class="search-box">
+ <div id="historyBox" style="background:#0d1117;border:1px solid #333;border-radius:12px;padding:20px;margin-bottom:20px;">
+            <div style="color:#888;font-size:0.85rem;margin-bottom:10px;">🕓 Son Analizler</div>
+            <div id="historyList"><span style="color:#444;font-size:0.8rem;">Henüz analiz yapılmadı</span></div>
+        </div>      
+ <div class="search-box">
             <h2>🔍 Hedef Analiz</h2>
             <div class="input-row">
                 <input type="text" id="urlInput" placeholder="https://example.com" />
@@ -326,6 +330,7 @@
                 const data = await res.json();
 
 lastData = data;
+addToHistory(data.url, data.score, data.grade);
                 if (!res.ok) throw new Error(data);
 
                 // Skor
@@ -395,7 +400,23 @@ lastData = data;
 
         document.getElementById('urlInput').addEventListener('keypress', e => {
 let darkMode = true;
-        function toggleTheme() {
+let history = [];
+        function addToHistory(url, score, grade) {
+            history.unshift({url, score, grade, time: new Date().toLocaleTimeString()});
+            if (history.length > 5) history.pop();
+            renderHistory();
+        }
+        function renderHistory() {
+            const el = document.getElementById('historyList');
+            if (!el) return;
+            el.innerHTML = history.map(h => `
+                <div style="display:flex;justify-content:space-between;padding:8px;background:#111;border-radius:6px;margin-bottom:6px;cursor:pointer;" onclick="document.getElementById('urlInput').value='${h.url}'">
+                    <span style="color:#888;font-size:0.8rem;">${h.time} — ${h.url}</span>
+                    <span style="color:${gradeColors[h.grade]};font-weight:bold;">${h.grade} (${h.score})</span>
+                </div>
+            `).join('');
+        } 
+       function toggleTheme() {
             darkMode = !darkMode;
             document.body.style.background = darkMode ? '#0a0a0f' : '#f0f0f0';
             document.body.style.color = darkMode ? '#e0e0e0' : '#111';
