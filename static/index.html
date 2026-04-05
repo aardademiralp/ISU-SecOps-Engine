@@ -209,7 +209,7 @@
         }
 
         function addToHistory(url, score, grade) {
-            history.unshift({ url, score, grade, time: new Date().toLocaleTimeString() });
+            history.unshift({ url, score, grade, time: new Date().toLocaleString('tr-TR')  });
             if (history.length > 5) history.pop();
             renderHistory();
         }
