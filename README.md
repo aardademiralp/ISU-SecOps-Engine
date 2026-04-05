@@ -106,6 +106,13 @@ cargo build --release
 ```
 
 ### Kullanım
+### Web Panel (YENİ!)
+```bash
+# Web panelini başlat
+cargo run -- --web
+```
+
+Tarayıcıdan `http://localhost:8080` adresine git.
 ```bash
 # Temel kullanım
 cargo run -- --url https://example.com
