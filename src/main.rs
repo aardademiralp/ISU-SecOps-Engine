@@ -23,11 +23,13 @@ struct Args {
 async fn main() {
     let args = Args::parse();
 
-    if args.web {
+if args.web {
+        let _ = std::process::Command::new("firefox")
+            .arg("http://localhost:8080")
+            .spawn();
         start_server().await;
         return;
     }
-
     match args.url {
         Some(url) => {
             println!("\n🔍 Hedef analiz ediliyor: {}\n", url);
