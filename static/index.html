@@ -286,6 +286,17 @@
 
             <div class="cors-box">
                 <div class="title">── CORS Analizi ──</div>
+<div style="display:flex;gap:10px;margin-top:20px;">
+            <button onclick="showJSON()" style="background:#1a1a2e;color:#00ff88;border:1px solid #00ff88;flex:1;">
+                📋 JSON Görüntüle
+            </button>
+            <button onclick="copyResults()" style="background:#1a1a2e;color:#00ccff;border:1px solid #00ccff;flex:1;">
+                📄 Sonuçları Kopyala
+            </button>
+        </div>
+        <div id="jsonOutput" style="display:none;margin-top:15px;background:#111;border-radius:8px;padding:15px;overflow-x:auto;">
+            <pre id="jsonPre" style="color:#00ff88;font-size:0.75rem;"></pre>
+        </div>
                 <div id="corsInfo"></div>
             </div>
         </div>
@@ -310,6 +321,7 @@
                 const res = await fetch(`/analyze?url=${encodeURIComponent(url)}`);
                 const data = await res.json();
 
+lastData = data;
                 if (!res.ok) throw new Error(data);
 
                 // Skor
@@ -377,7 +389,32 @@
         }
 
         document.getElementById('urlInput').addEventListener('keypress', e => {
-            if (e.key === 'Enter') analyze();
+let lastData = null;
+
+        function showJSON() {
+            if (!lastData) return;
+            const jsonDiv = document.getElementById('jsonOutput');
+            const jsonPre = document.getElementById('jsonPre');
+            if (jsonDiv.style.display === 'none') {
+                jsonPre.textContent = JSON.stringify(lastData, null, 2);
+                jsonDiv.style.display = 'block';
+            } else {
+                jsonDiv.style.display = 'none';
+            }
+        }
+
+        function copyResults() {
+            if (!lastData) return;
+            const text = `ISU-SecOps-Engine Analiz Sonucu
+URL: ${lastData.url}
+Puan: ${lastData.score}/100
+Not: ${lastData.grade}
+Geçen Header: ${lastData.headers.filter(h=>h.passed).length}/${lastData.headers.length}`;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Sonuçlar kopyalandı!');
+            });
+        }           
+ if (e.key === 'Enter') analyze();
         });
     </script>
 </body>
