@@ -244,7 +244,11 @@
         }
 
         async function analyze() {
-            const url = document.getElementById('urlInput').value.trim();
+let url = document.getElementById('urlInput').value.trim();
+if (url && !url.startsWith('http://') && !url.startsWith('https://')) {
+    url = 'https://' + url;
+    document.getElementById('urlInput').value = url;
+}
             if (!url) return;
 
             document.getElementById('loading').style.display = 'block';
