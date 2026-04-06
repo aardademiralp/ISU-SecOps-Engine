@@ -181,3 +181,82 @@ pentester/
 ## ⚖️ Yasal Uyarı
 
 > Bu araç yalnızca **yetkili** sistemlerde **eğitim ve etik sızma testi** amaçlı kullanılmalıdır. İzinsiz kullanım yasal sorumluluk doğurur.	
+---
+
+## 🎯 Gerçek Dünya Senaryoları
+
+### Senaryo 1: E-ticaret Sitesi Testi
+Bir e-ticaret sitesini test ettiğinizde CSP eksikse, saldırgan ödeme sayfasına zararlı JavaScript enjekte ederek kredi kartı bilgilerini çalabilir.
+```bash
+cargo run -- --url https://hedef-eticaret.com
+```
+
+### Senaryo 2: Kurumsal Web Uygulaması
+HSTS eksik bir kurumsal uygulamada, şirket ağındaki saldırgan SSL Stripping yaparak kullanıcı oturumlarını ele geçirebilir.
+```bash
+cargo run -- --url https://kurumsal-uygulama.com --json
+```
+
+### Senaryo 3: API Güvenlik Kontrolü
+Bir REST API'nin CORS yapılandırmasını kontrol ederken wildcard (*) kullanımı tespit edilirse, herhangi bir siteden API'ya istek atılabilir demektir.
+```bash
+cargo run -- --url https://api.hedef.com
+```
+
+---
+
+## ❓ Sık Sorulan Sorular (FAQ)
+
+**S: Bu araç siteye zarar verir mi?**
+H: Hayır. Araç yalnızca normal bir HTTP GET isteği atar ve dönen header'ları okur. Tarayıcınızın yaptığından farklı değildir.
+
+**S: HTTPS olmayan sitelerde çalışır mı?**
+H: Evet, `http://` ile başlayan URL'ler de analiz edilebilir. Ancak HTTP sitelerde HSTS zaten eksik olacaktır.
+
+**S: Hangi sitelerde kullanabilirim?**
+H: Yalnızca kendi sitenizde veya test izni aldığınız sistemlerde kullanın. İzinsiz kullanım yasal sorumluluk doğurur.
+
+**S: JSON çıktısını nasıl kaydedebilirim?**
+H: 
+```bash
+cargo run -- --url https://example.com --json > sonuc.json
+```
+
+**S: Web paneli dışarıdan erişilebilir mi?**
+H: Varsayılan olarak `0.0.0.0:8080` üzerinde çalışır. Güvenlik için yalnızca `localhost`'ta kullanmanız önerilir.
+
+---
+
+## 🤝 Katkıda Bulunma
+
+Projeye katkıda bulunmak için:
+
+1. Repoyu fork edin
+2. Feature branch oluşturun: `git checkout -b feat/yeni-ozellik`
+3. Değişikliklerinizi commit edin: `git commit -m "feat: yeni özellik eklendi"`
+4. Branch'i push edin: `git push origin feat/yeni-ozellik`
+5. Pull Request açın
+
+### Commit Mesajı Formatı
+```
+feat:     Yeni özellik
+fix:      Hata düzeltme
+docs:     Dokümantasyon
+style:    Kod formatı
+refactor: Kod yeniden yapılandırma
+test:     Test ekleme
+```
+
+---
+
+## 📝 Versiyon Geçmişi
+
+### v0.1.0 (2026-04-05)
+- ✅ 10 güvenlik header kontrolü
+- ✅ CORS analizi
+- ✅ 0-100 puanlama sistemi (A-F)
+- ✅ Renkli terminal çıktısı
+- ✅ Web panel (axum + HTML/JS)
+- ✅ JSON çıktı desteği
+- ✅ 13 unit test
+- ✅ GPL-3.0 lisansı
