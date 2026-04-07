@@ -45,12 +45,7 @@
 ## 🎥 Proje Demosu
 
 
-
-<video src="./demo/demo.mp4" controls="controls" width="100%">
-
-  Tarayıcınız video etiketini desteklemiyor.
-
-</video>
+https://github.com/aardademiralp/ISU-SecOps-Engine/raw/midterm/aydin-arda-demiralp/demo/demo.mp4
 
 
 ---
