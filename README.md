@@ -1,11 +1,14 @@
 # 🛡️ ISU-SecOps-Engine — HTTP Header Analyzer
 
+![İstinye logo](https://upload.wikimedia.org/wikipedia/tr/6/69/%C4%B0stinye_%C3%9Cniversitesi_logo.png)
+
 **BGT006 Sızma Testi | İstinye Üniversitesi**
 
 ![Rust](https://img.shields.io/badge/Rust-ASYNC-orange?style=for-the-badge&logo=rust)
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 ![Tests](https://img.shields.io/badge/Tests-13%20passed-brightgreen?style=for-the-badge)
 ![Clippy](https://img.shields.io/badge/Clippy-clean-blue?style=for-the-badge)
+![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
 
 | | |
 |---|---|
@@ -13,7 +16,26 @@
 | **Branch** | `midterm/aydin-arda-demiralp` |
 | **Ders** | BGT006 Sızma Testi |
 | **Üniversite** | İstinye Üniversitesi |
+| **Danışman / Instructor** | Keyvan Arasteh |
 
+---
+
+## Table of Contents
+
+- [📖 Proje Hakkında](#-proje-hakkında)
+- [🚀 Özellikler](#-özellikler)
+- [🔍 Kontrol Edilen Header'lar](#-kontrol-edilen-headerlar)
+- [📊 Puanlama Sistemi](#-puanlama-sistemi)
+- [💻 Örnek Çıktı](#-örnek-çıktı)
+- [🛠️ Kurulum ve Çalıştırma](#️-kurulum-ve-çalıştırma)
+- [🧪 Testler](#-testler)
+- [🏗️ Proje Yapısı](#️-proje-yapısı)
+- [📦 Kullanılan Kütüphaneler](#-kullanılan-kütüphaneler)
+- [⚖️ Yasal Uyarı](#️-yasal-uyarı)
+- [🎯 Gerçek Dünya Senaryoları](#-gerçek-dünya-senaryoları)
+- [❓ Sık Sorulan Sorular (FAQ)](#-sık-sorulan-sorular-faq)
+- [🤝 Katkıda Bulunma](#-katkıda-bulunma)
+- [📝 Versiyon Geçmişi](#-versiyon-geçmişi)
 ---
 
 ## 📖 Proje Hakkında
