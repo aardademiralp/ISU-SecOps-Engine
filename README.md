@@ -42,6 +42,18 @@
 **ISU-SecOps-Engine**, sızma testi sürecinin **keşif (reconnaissance)** aşamasında kullanılan bir HTTP güvenlik header analiz aracıdır. Hedef web uygulamasına HTTP isteği atarak dönen header'ları analiz eder, eksik güvenlik başlıklarını tespit eder ve 0–100 arası bir güvenlik puanı (A–F) üretir.
 
 ---
+## 🎥 Proje Demosu
+
+
+
+<video src="./demo/demo.mp4" controls="controls" width="100%">
+
+  Tarayıcınız video etiketini desteklemiyor.
+
+</video>
+
+
+---
 
 ## 🚀 Özellikler
 
