@@ -1,7 +1,6 @@
 # 🛡️ ISU-SecOps-Engine — HTTP Header Analyzer
 
-![İstinye logo](https://upload.wikimedia.org/wikipedia/tr/6/69/%C4%B0stinye_%C3%9Cniversitesi_logo.png)
-
+![İstinye logo](https://www.istinye.edu.tr/sites/default/files/2025-07/isu_logo_tr-1.svg)
 **BGT006 Sızma Testi | İstinye Üniversitesi**
 
 ![Rust](https://img.shields.io/badge/Rust-ASYNC-orange?style=for-the-badge&logo=rust)
