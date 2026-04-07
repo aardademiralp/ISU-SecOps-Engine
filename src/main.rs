@@ -10,6 +10,10 @@ struct Args {
     #[arg(short, long)]
     url: Option<String>,
 
+    /// URL listesi içeren dosya (her satırda bir URL)
+    #[arg(short, long)]
+    file: Option<String>,
+
     /// JSON formatında çıktı ver
     #[arg(short, long, default_value_t = false)]
     json: bool,
@@ -23,16 +27,42 @@ struct Args {
 async fn main() {
     let args = Args::parse();
 
-if args.web {
+    if args.web {
         let _ = std::process::Command::new("firefox")
             .arg("http://localhost:8080")
             .spawn();
         start_server().await;
         return;
     }
+
+    // Toplu URL analizi
+    if let Some(file_path) = args.file {
+        let content = std::fs::read_to_string(&file_path)
+            .unwrap_or_else(|_| { eprintln!("Dosya okunamadı: {}", file_path); std::process::exit(1); });
+
+        let urls: Vec<&str> = content.lines().filter(|l| !l.trim().is_empty()).collect();
+        println!("Toplam {} URL analiz edilecek\n", urls.len());
+
+        for url in urls {
+            println!("Analiz ediliyor: {}", url);
+            match analyze_headers(url).await {
+                Ok(report) => {
+                    if args.json {
+                        println!("{}", serde_json::to_string_pretty(&report).unwrap());
+                    } else {
+                        print_report(&report);
+                    }
+                }
+                Err(e) => eprintln!("Hata ({}): {}", url, e),
+            }
+        }
+        return;
+    }
+
+    // Tekil URL analizi
     match args.url {
         Some(url) => {
-            println!("\n🔍 Hedef analiz ediliyor: {}\n", url);
+            println!("\nHedef analiz ediliyor: {}\n", url);
             match analyze_headers(&url).await {
                 Ok(report) => {
                     if args.json {
@@ -42,15 +72,16 @@ if args.web {
                     }
                 }
                 Err(e) => {
-                    eprintln!("❌ Hata: {e}");
+                    eprintln!("Hata: {e}");
                     std::process::exit(1);
                 }
             }
         }
         None => {
-            eprintln!("❌ URL veya --web parametresi gerekli!");
-            eprintln!("   Kullanım: cargo run -- --url https://example.com");
-            eprintln!("   Panel:    cargo run -- --web");
+            eprintln!("URL veya --web parametresi gerekli!");
+            eprintln!("Kullanim: cargo run -- --url https://example.com");
+            eprintln!("Toplu:    cargo run -- --file urls.txt");
+            eprintln!("Panel:    cargo run -- --web");
             std::process::exit(1);
         }
     }
