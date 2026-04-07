@@ -45,8 +45,9 @@
 ## 🎥 Proje Demosu
 
 
-https://github.com/aardademiralp/ISU-SecOps-Engine/raw/midterm/aydin-arda-demiralp/demo/demo.mp4
-
+<video width="100%" controls>
+  <source src="https://raw.githubusercontent.com/aardademiralp/ISU-SecOps-Engine/midterm/aydin-arda-demiralp/demo/demo.mp4" type="video/mp4">
+</video>
 
 ---
 

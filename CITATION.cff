@@ -1,0 +1,8 @@
+cff-version: 1.2.0
+message: 'Eğer bu yazılımı kullanırsanız, lütfen aşağıdaki gibi atıfta bulunun.'
+authors:
+  - family-names: 'Demiralp'
+    given-names: 'Aydın Arda'
+title: 'ISU-SecOps-Engine'
+version: 1.0.0
+date-released: 2026-04-07
